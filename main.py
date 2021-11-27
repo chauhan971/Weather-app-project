@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import*
 import requests
 import os
+from time import strftime
 from PIL import Image, ImageTk
 
 root = tk.Tk()
@@ -16,8 +17,9 @@ def format_response(weather):
         city = weather['name']
         condition = weather['weather'][0]['description']
         temp = weather['main']['temp']
-
-        final_str = 'City:%s\nConditions :%s\nTemprature :%s °F' % (city, condition, temp)
+        Celsius = ((temp-32)*5)/9
+        cell = int(Celsius)
+        final_str = 'City:%s\nConditions :%s\nTemprature :%s °F\n  Celsius:%d °C' % (city, condition, temp,cell)
 
     except:
         final_str = 'There was a problem retrieving that information'
@@ -48,11 +50,16 @@ def open_image(icon):
     weather_icon.image = img
 
 
+def time():
+	string = strftime('%H:%M:%S %p')
+	lbl.config(text = string)
+	lbl.after(1000, time)
+
 img = Image.open('./Weather/bg2.png')
 img = img.resize((600, 500), Image.ANTIALIAS)
 img_photo = ImageTk.PhotoImage(img)
 
-# the box height and width
+
 bg_lbl = tk.Label(root, image=img_photo)
 bg_lbl.place(x=0, y=0, width=600, height=500)
 
@@ -63,6 +70,21 @@ heading_title.place(x=80, y=10, width=450, height=50)
 
 frame_one = tk.Frame(bg_lbl, bg="#ffe4e1", bd=5)
 frame_one.place(x=80, y=50, width=450, height=80)
+
+lbl = tk.Label(bg_lbl,fg='blue', bg='#ffe4e1',font=('times new roman', 10, 'bold'))
+# Placing clock at the centre
+# of the tkinter window
+lbl.place(x=250, y=150, width=90, height=40)
+time()
+
+
+# frame_one = tk.Frame(bg_lbl, bg="#ffe4e1", bd=5)
+# frame_one.place(x=80, y=50, width=450, height=80)
+
+# Styling the label widget so that clock
+# will look more attractive
+
+
 
 txt_box = tk.Entry(frame_one, font=('Copperplate', 22), width=17)
 txt_box.grid(row=0, column=0, sticky='w')
